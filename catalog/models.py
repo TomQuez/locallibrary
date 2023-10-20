@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+import uuid
 
 # Create your models here.
 class Genre(models.Model):
@@ -26,3 +27,23 @@ class Book(models.Model):
     def get_absolute_url(self):
         """Cette fonction est requise par django, lorsque vous souhaitez détailler le contenu d'un objet."""
         return reverse('book-detail',args=[str(self.id)])
+    
+class BookInstance(models.Model):
+    """Cet objet permet de modéliser les copies d'un ouvrage (i.e. qui peut être emprunté physiquement)."""
+    id=models.UUIDField(primary_key=True,default=uuid.uuid4,help_text='Unique ID for this particular book across whole library')
+    book=models.ForeignKey(Book,on_delete=models.SET_NULL,null=True)
+    imprint=models.CharField(max_length=200)
+    due_back=models.DateField(null=True,blank=True)
+    LOAN_STATUS=(
+        ('m','Maintenance'),
+        ('o','On loan'),
+        ('a','Available'),
+        ('r','Reserved'),
+    )
+    status=models.CharField(max_length=1,choices=LOAN_STATUS,blank=True,default='m',help_text='Book Availability')
+    class Meta:
+        orderin=['due_back']
+    
+    def __str__(self):
+        """Fonction requise par django pour manipuler les objets Book dans la base de données."""
+        return f'{self.id}({self.book.title})'
