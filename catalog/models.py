@@ -42,7 +42,7 @@ class BookInstance(models.Model):
     )
     status=models.CharField(max_length=1,choices=LOAN_STATUS,blank=True,default='m',help_text='Book Availability')
     class Meta:
-        orderin=['due_back']
+        ordering=['due_back']
     
     def __str__(self):
         """Fonction requise par django pour manipuler les objets Book dans la base de données."""
