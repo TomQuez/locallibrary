@@ -5,7 +5,7 @@
     <strong>
         Auteur: 
     </strong>
-    <a href="">{{book.author}}</a>
+    <a href="{% url 'author-detail' book.author.pk %}">{{book.author}}</a>
 </p>
 <p>
     <strong>Résumé : </strong>
